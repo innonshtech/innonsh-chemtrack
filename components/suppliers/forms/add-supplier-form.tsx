@@ -28,7 +28,7 @@ const supplierFormSchema = z.object({
   gstNumber: z.string().optional(),
   panNumber: z.string().optional(),
   registrationNumber: z.string().optional(),
-  category: z.string({ required_error: "Supplier Category is required" }),
+  category: z.string().min(1, "Supplier Category is required"),
   
   // Address Information
   addressLine1: z.string().optional(),

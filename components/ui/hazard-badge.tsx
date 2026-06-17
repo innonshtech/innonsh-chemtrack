@@ -3,14 +3,15 @@ import { HazardClass } from "@prisma/client"
 import { cn } from "@/lib/utils"
 
 interface HazardBadgeProps {
-  hazard: HazardClass
+  hazard: HazardClass | string
   className?: string
+  hideLabel?: boolean
 }
 
-export function HazardBadge({ hazard, className }: HazardBadgeProps) {
+export function HazardBadge({ hazard, className, hideLabel }: HazardBadgeProps) {
   const formatName = (name: string) => name.replace("_", " ")
 
-  const getHazardStyles = (hazard: HazardClass) => {
+  const getHazardStyles = (hazard: HazardClass | string) => {
     switch (hazard) {
       case "FLAMMABLE":
         return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-900/50"
@@ -33,7 +34,7 @@ export function HazardBadge({ hazard, className }: HazardBadgeProps) {
 
   return (
     <Badge variant="outline" className={cn("font-medium whitespace-nowrap", getHazardStyles(hazard), className)}>
-      {formatName(hazard)}
+      {!hideLabel && formatName(hazard)}
     </Badge>
   )
 }

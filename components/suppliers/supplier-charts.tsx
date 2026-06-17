@@ -39,7 +39,7 @@ export function SupplierCharts({ purchaseValueData, averageCostData }: SupplierC
                   cursor={{ fill: 'hsl(var(--muted)/0.5)' }}
                   contentStyle={{ backgroundColor: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
                   itemStyle={{ color: 'hsl(var(--foreground))' }}
-                  formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Spend']}
+                  formatter={(value: any) => [`₹${Number(value).toLocaleString()}`, 'Spend']}
                 />
                 <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -75,7 +75,7 @@ export function SupplierCharts({ purchaseValueData, averageCostData }: SupplierC
                 <Tooltip 
                   contentStyle={{ backgroundColor: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
                   itemStyle={{ color: 'hsl(var(--foreground))' }}
-                  formatter={(value: number, name: string) => [`₹${value.toLocaleString()}`, name]}
+                  formatter={(value: any, name: any) => [`₹${Number(value).toLocaleString()}`, name]}
                 />
                 {/* Dynamically render lines for the top 2 chemicals if present, else fallback */}
                 {averageCostData.length > 0 && Object.keys(averageCostData[0])

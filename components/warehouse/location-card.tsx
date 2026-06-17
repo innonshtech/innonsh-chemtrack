@@ -61,7 +61,7 @@ export function LocationCard({ location, isSelected, onClick }: LocationCardProp
             <div className="flex flex-wrap gap-1">
               {location.compatibleHazardClasses.slice(0, 2).map(hc => (
                 <div key={hc} title={hc.replace("_", " ")} className="w-5 h-5 overflow-hidden rounded-sm flex items-center justify-center">
-                  <HazardBadge hazard={hc} hideLabel />
+                  <HazardBadge hazard={hc as any} hideLabel />
                 </div>
               ))}
               {location.compatibleHazardClasses.length > 2 && (

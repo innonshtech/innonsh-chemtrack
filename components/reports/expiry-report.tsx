@@ -104,7 +104,7 @@ export function ExpiryReport({ batches }: ExpiryReportProps) {
                 />
                 <RechartsTooltip 
                   cursor={{ fill: 'transparent' }}
-                  formatter={(value: number) => [`₹${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, 'Expiring Value']}
+                  formatter={(value: any) => [`₹${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2 })}`, 'Expiring Value']}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {chartData.map((entry, index) => (

@@ -25,7 +25,7 @@ const formSchema = z.object({
   safetyNotes: z.string().optional(),
   unitOfMeasure: z.string().min(1, "Unit of measure is required"),
   reorderLevel: z.number().min(0, "Must be positive"),
-  minimumStock: z.number().optional().default(0),
+  minimumStock: z.number().min(0),
 })
 
 const steps = [

@@ -45,7 +45,7 @@ export default async function ReportsPage() {
     type: t.type,
     quantity: t.quantity,
     timestamp: t.timestamp,
-    reason: t.reason,
+    reason: t.reason || "",
     chemicalName: t.batch.chemical.name,
     batchNumber: t.batch.batchNumber,
     performedBy: t.performedBy.name

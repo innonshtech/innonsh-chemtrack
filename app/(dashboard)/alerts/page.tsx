@@ -14,7 +14,7 @@ export default async function AlertsPage() {
     }
   })
 
-  const payload: AlertDataPayload[] = rawAlerts.map(alert => {
+  const payload: AlertDataPayload[] = rawAlerts.map((alert: any) => {
     // Derive Severity
     const isCritical = alert.type === "EXPIRED" || alert.type === "HAZARD_VIOLATION"
     const severity = isCritical ? "CRITICAL" : "WARNING"
