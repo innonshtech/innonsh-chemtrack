@@ -15,7 +15,7 @@ export default async function PurchaseOrdersPage() {
     }
   })
 
-  const data: POData[] = rawPOs.map(po => ({
+  const data: POData[] = rawPOs.map((po: any) => ({
     id: po.id,
     poNumber: po.id.slice(0, 8).toUpperCase(),
     supplierName: po.supplier.name,

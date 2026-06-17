@@ -12,7 +12,7 @@ export default async function SettingsPage() {
     }
   })
 
-  const users: SettingsUser[] = rawUsers.map(u => ({
+  const users: SettingsUser[] = rawUsers.map((u: any) => ({
     id: u.id,
     name: u.name,
     email: u.email,
@@ -32,7 +32,7 @@ export default async function SettingsPage() {
     take: 50 // Limit for audit log UI
   })
 
-  const auditLogs: SettingsAuditLog[] = rawTransactions.map(t => {
+  const auditLogs: SettingsAuditLog[] = rawTransactions.map((t: any) => {
     let severity: "INFO" | "WARNING" | "CRITICAL" = "INFO"
     if (t.type === "ADJUSTMENT") severity = "WARNING"
     

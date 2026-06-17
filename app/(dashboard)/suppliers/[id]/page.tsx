@@ -41,7 +41,7 @@ export default async function SupplierDetailPage({ params }: SupplierDetailPageP
   let totalSpend = 0
   let activeOrdersCount = 0
   
-  supplier.purchaseOrders.forEach(po => {
+  supplier.purchaseOrders.forEach((po: any) => {
     if (po.status === "RECEIVED") {
       totalSpend += po.totalAmount
     }
@@ -54,7 +54,7 @@ export default async function SupplierDetailPage({ params }: SupplierDetailPageP
   
   // Aggregate unique chemicals supplied
   const chemMap = new Map<string, any>()
-  supplier.batches.forEach(b => {
+  supplier.batches.forEach((b: any) => {
     const chemId = b.chemical.id
     if (!chemMap.has(chemId)) {
       chemMap.set(chemId, {
@@ -78,7 +78,7 @@ export default async function SupplierDetailPage({ params }: SupplierDetailPageP
   // 1. Purchase Value Trend (Group by Month)
   // We'll aggregate POs by short month string e.g., "Jan", "Feb"
   const monthlySpendMap = new Map<string, number>()
-  supplier.purchaseOrders.forEach(po => {
+  supplier.purchaseOrders.forEach((po: any) => {
     // Only count non-cancelled POs for spend trends
     if (po.status !== "CANCELLED") {
       const monthYear = new Date(po.createdAt).toLocaleDateString("en-US", { month: "short", year: "2-digit" })
@@ -98,9 +98,9 @@ export default async function SupplierDetailPage({ params }: SupplierDetailPageP
   
   // Find top 2 most frequently supplied chemicals to keep chart readable
   const sortedChems = [...uniqueChemicals].sort((a, b) => b.batchCount - a.batchCount)
-  const topChemNames = sortedChems.slice(0, 2).map(c => c.name)
+  const topChemNames = sortedChems.slice(0, 2).map((c: any) => c.name)
 
-  supplier.batches.forEach(b => {
+  supplier.batches.forEach((b: any) => {
     if (topChemNames.includes(b.chemical.name)) {
       const monthYear = new Date(b.createdAt).toLocaleDateString("en-US", { month: "short", year: "2-digit" })
       

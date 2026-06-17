@@ -20,9 +20,9 @@ export default async function WarehousePage() {
     ]
   })
 
-  const payload: WarehouseLocationPayload[] = rawLocations.map(loc => {
+  const payload: WarehouseLocationPayload[] = rawLocations.map((loc: any) => {
     // 1. Calculate Total Occupancy
-    const currentUtilization = loc.batches.reduce((sum, b) => sum + b.quantityRemaining, 0)
+    const currentUtilization = loc.batches.reduce((sum: number, b: any) => sum + b.quantityRemaining, 0)
     let occupancyPercentage = (currentUtilization / loc.maxCapacity) * 100
     if (occupancyPercentage > 100) occupancyPercentage = 100
 
@@ -30,7 +30,7 @@ export default async function WarehousePage() {
     const chemMap = new Map<string, { id: string, name: string, hazardClass: string, quantity: number, unit: string, batchCount: number }>()
     let hasConflict = false
 
-    loc.batches.forEach(b => {
+    loc.batches.forEach((b: any) => {
       const chemId = b.chemical.id
       
       // Conflict checking

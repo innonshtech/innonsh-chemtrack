@@ -20,8 +20,8 @@ export default async function DashboardPage() {
   
   const categoryCountMap: Record<string, number> = {}
 
-  chemicalsWithBatches.forEach(chem => {
-    const totalRemaining = chem.batches.reduce((sum, b) => sum + b.quantityRemaining, 0)
+  chemicalsWithBatches.forEach((chem: any) => {
+    const totalRemaining = chem.batches.reduce((sum: number, b: any) => sum + b.quantityRemaining, 0)
     if (totalRemaining <= chem.reorderLevel) {
       lowStockCount++
     }
@@ -32,7 +32,7 @@ export default async function DashboardPage() {
     }
   })
 
-  const categoryData = Object.keys(categoryCountMap).map(k => ({ category: k, count: categoryCountMap[k] }))
+  const categoryData = Object.keys(categoryCountMap).map((k: any) => ({ category: k, count: categoryCountMap[k] }))
 
   // 2. Fetch Active Batches
   const activeBatches = await db.batch.findMany({
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   
   const hazardCountMap: Record<string, number> = {}
 
-  activeBatches.forEach(batch => {
+  activeBatches.forEach((batch: any) => {
     // Inventory value
     inventoryValue += (batch.quantityRemaining * batch.costPerUnit)
     
@@ -65,7 +65,7 @@ export default async function DashboardPage() {
     hazardCountMap[hClass] = (hazardCountMap[hClass] || 0) + 1
   })
 
-  const hazardData = Object.keys(hazardCountMap).map(k => ({ hazardClass: k, count: hazardCountMap[k] }))
+  const hazardData = Object.keys(hazardCountMap).map((k: any) => ({ hazardClass: k, count: hazardCountMap[k] }))
 
   // 3. Purchase Orders
   const openPurchaseOrders = await db.purchaseOrder.count({
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
   })
 
   // Format activity feed
-  const activities = recentTransactions.map(tx => ({
+  const activities = recentTransactions.map((tx: any) => ({
     id: tx.id,
     action: tx.type,
     details: `${tx.type === "STOCK_IN" ? "Added" : "Removed"} ${tx.quantity} ${tx.batch.chemical.unitOfMeasure} of ${tx.batch.chemical.name}`,

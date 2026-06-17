@@ -25,7 +25,7 @@ export default async function ReportsPage() {
   })
 
   // Format data for the client orchestrator
-  const batches = rawBatches.map(b => ({
+  const batches = rawBatches.map((b: any) => ({
     id: b.id,
     batchNumber: b.batchNumber,
     chemicalName: b.chemical.name,
@@ -40,7 +40,7 @@ export default async function ReportsPage() {
     unitOfMeasure: b.chemical.unitOfMeasure
   }))
 
-  const transactions = rawTransactions.map(t => ({
+  const transactions = rawTransactions.map((t: any) => ({
     id: t.id,
     type: t.type,
     quantity: t.quantity,

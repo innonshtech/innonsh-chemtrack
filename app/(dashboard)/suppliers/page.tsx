@@ -15,10 +15,10 @@ export default async function SuppliersPage() {
     }
   })
 
-  const data: SupplierData[] = rawSuppliers.map(supplier => {
+  const data: SupplierData[] = rawSuppliers.map((supplier: any) => {
     // If they have recent or active POs, consider them active
     const hasActivePOs = supplier.purchaseOrders.some(
-      po => ["DRAFT", "PENDING_APPROVAL", "APPROVED", "ORDERED"].includes(po.status)
+      (po: any) => ["DRAFT", "PENDING_APPROVAL", "APPROVED", "ORDERED"].includes(po.status)
     )
 
     return {
