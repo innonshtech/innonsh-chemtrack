@@ -21,8 +21,8 @@ export default async function ChemicalsPage() {
   })
 
   // Format the data for the data table
-  const data: ChemicalData[] = rawChemicals.map(chem => {
-    const currentStock = chem.batches.reduce((sum, batch) => sum + batch.quantityRemaining, 0)
+  const data: ChemicalData[] = rawChemicals.map((chem: any) => {
+    const currentStock = chem.batches.reduce((sum: number, batch: any) => sum + batch.quantityRemaining, 0)
     
     let status: "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" = "IN_STOCK"
     if (currentStock === 0) status = "OUT_OF_STOCK"
@@ -30,7 +30,7 @@ export default async function ChemicalsPage() {
 
     // Extract unique supplier names for this chemical's active batches
     const suppliersSet = new Set<string>()
-    chem.batches.forEach(b => {
+    chem.batches.forEach((b: any) => {
       if (b.supplier?.name) suppliersSet.add(b.supplier.name)
     })
 
