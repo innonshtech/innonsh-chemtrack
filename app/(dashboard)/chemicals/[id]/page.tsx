@@ -33,7 +33,7 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
     notFound()
   }
 
-  const currentStock = chemical.batches.reduce((sum, batch) => sum + batch.quantityRemaining, 0)
+  const currentStock = chemical.batches.reduce((sum: number, batch: any) => sum + batch.quantityRemaining, 0)
   
   let status: "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" = "IN_STOCK"
   if (currentStock === 0) status = "OUT_OF_STOCK"
