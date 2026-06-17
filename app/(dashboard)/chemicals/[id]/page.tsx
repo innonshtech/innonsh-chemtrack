@@ -40,7 +40,7 @@ export default async function ChemicalDetailPage({ params }: ChemicalDetailPageP
   else if (currentStock <= chemical.reorderLevel) status = "LOW_STOCK"
 
   const suppliersSet = new Set<string>()
-  chemical.batches.forEach(b => {
+  chemical.batches.forEach((b: any) => {
     if (b.quantityRemaining > 0 && b.supplier?.name) {
       suppliersSet.add(b.supplier.name)
     }
