@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+}
+
+enum HazardClass {
+  FLAMMABLE
+  CORROSIVE
+  TOXIC
+  OXIDIZER
+  EXPLOSIVE
+  COMPRESSED_GAS
+  NON_HAZARDOUS
+}
+
+enum UnitOfMeasure {
+  KG
+  G
+  L
+  ML
+  UNIT
+}
+
+enum TransactionType {
+  STOCK_IN
+  STOCK_OUT
+  ADJUSTMENT
+  DISPOSAL
+}
+
+enum POStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  ORDERED
+  RECEIVED
+  CANCELLED
+}
+
+enum AlertType {
+  LOW_STOCK
+  EXPIRY_WARNING
+  EXPIRED
+  HAZARD_VIOLATION
+}
+
+enum AlertStatus {
+  ACTIVE
+  RESOLVED
+  DISMISSED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(MANAGER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  transactions   Transaction[]
+  purchaseOrders PurchaseOrder[]
+  auditLogs      AuditLog[]
+}
+
+model Chemical {
+  id               String        @id @default(uuid())
+  name             String
+  casNumber        String
+  category         String
+  hazardClass      HazardClass
+  unitOfMeasure    UnitOfMeasure
+  reorderLevel     Float
+  storageCondition String
+  sdsFileUrl       String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  batches  Batch[]
+  poItems  POItem[]
+  alerts   Alert[]
+
+  @@index([casNumber])
+}
+
+model Batch {
+  id                  String   @id @default(uuid())
+  chemicalId          String
+  batchNumber         String
+  manufactureDate     DateTime
+  expiryDate          DateTime
+  quantityReceived    Float
+  quantityRemaining   Float
+  supplierId          String
+  warehouseLocationId String
+  costPerUnit         Float
+  createdAt           DateTime @default(now())
+
+  chemical          Chemical          @relation(fields: [chemicalId], references: [id])
+  supplier          Supplier          @relation(fields: [supplierId], references: [id])
+  warehouseLocation WarehouseLocation @relation(fields: [warehouseLocationId], references: [id])
+  transactions      Transaction[]
+  alerts            Alert[]
+
+  @@unique([chemicalId, batchNumber])
+  @@index([expiryDate])
+  @@index([chemicalId])
+}
+
+model Supplier {
+  id            String   @id @default(uuid())
+  name          String
+  contactPerson String
+  email         String
+  phone         String
+  address       String
+  gstNumber     String
+  createdAt     DateTime @default(now())
+
+  batches        Batch[]
+  purchaseOrders PurchaseOrder[]
+}
+
+model WarehouseLocation {
+  id                      String   @id @default(uuid())
+  code                    String   @unique // e.g. "A-01-03"
+  zone                    String
+  rack                    String
+  shelf                   String
+  maxCapacity             Float
+  compatibleHazardClasses String[] // Array of HazardClass values stored as strings
+  createdAt               DateTime @default(now())
+
+  batches Batch[]
+}
+
+model Transaction {
+  id           String          @id @default(uuid())
+  batchId      String
+  type         TransactionType
+  quantity     Float
+  performedById String
+  reason       String?
+  timestamp    DateTime        @default(now())
+
+  batch       Batch @relation(fields: [batchId], references: [id])
+  performedBy User  @relation(fields: [performedById], references: [id])
+
+  @@index([timestamp])
+}
+
+model PurchaseOrder {
+  id               String   @id @default(uuid())
+  supplierId       String
+  status           POStatus @default(DRAFT)
+  totalAmount      Float
+  expectedDelivery DateTime
+  createdById      String
+  createdAt        DateTime @default(now())
+
+  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  createdBy User     @relation(fields: [createdById], references: [id])
+  items     POItem[]
+}
+
+model POItem {
+  id         String @id @default(uuid())
+  poId       String
+  chemicalId String
+  quantity   Float
+  unitPrice  Float
+
+  po       PurchaseOrder @relation(fields: [poId], references: [id])
+  chemical Chemical      @relation(fields: [chemicalId], references: [id])
+}
+
+model Alert {
+  id         String      @id @default(uuid())
+  type       AlertType
+  chemicalId String?
+  batchId    String?
+  status     AlertStatus @default(ACTIVE)
+  message    String
+  createdAt  DateTime    @default(now())
+
+  chemical Chemical? @relation(fields: [chemicalId], references: [id])
+  batch    Batch?    @relation(fields: [batchId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  action     String
+  entityType String
+  entityId   String
+  oldValue   Json?
+  newValue   Json?
+  timestamp  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([timestamp])
+}
